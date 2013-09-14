@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDyelR-9or9An8c1-gPwYBzxF7tAm0RJTg&sensor=false">
+</script>
+<script>
+function initialize()
+{
+var lat = {{latitude}};
+var lon = {{longitude}};
+var latlon = {{LatLong}};
+var myLatLng = new google.maps.LatLng(lat, lon);
+var mapProp = {
+  center:myLatLng,
+  zoom:5,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+var map=new google.maps.Map(document.getElementById("googleMap")
+  ,mapProp);
+var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,     
+  });
+  var roadPaths = new Array();
+  for (i = 0; i < latlon.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(latlon[i][0], latlon[i][1]),
+        map: map
+      });
+	  roadPaths[i] = new google.maps.LatLng(latlon[i][0], latlon[i][1]);
+	  }
+	var roadPath = new google.maps.Polyline({
+    path: roadPaths,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+	roadPath.setMap(map);
+	
+	var pointArray = new google.maps.MVCArray(roadPaths);
+
+  heatmap = new google.maps.visualization.HeatmapLayer({
+    data: pointArray
+  });
+
+  heatmap.setMap(map);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+<body>
+
+<div id="googleMap" style="width:1000px;height:680px;"></div>
+
+</body>
+</html>
